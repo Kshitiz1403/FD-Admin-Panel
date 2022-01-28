@@ -22,7 +22,6 @@ const Users = props => {
             id: 'name',
             name: 'Name',
             selector: row => <NameDetails name={row.name} email={row.email} />,
-            sortable: true
         },
         {
             id: 'phone',
@@ -76,14 +75,13 @@ const Users = props => {
     ];
 
 
+    const [activeView, setActiveView] = useState('all')
     const [filterText, setFilterText] = React.useState("");
     const [resetPaginationToggle, setResetPaginationToggle] = React.useState(
         false
     );
-    // const filteredItems = data.filter(
-    //   item => item.name && item.name.includes(filterText)
-    // );
-    const filteredItems = data.filter(
+    const [processedData, setProcessedData] = useState([...data])
+    const filteredItems = processedData.filter(
         item =>
             JSON.stringify(item)
                 .toLowerCase()
@@ -107,25 +105,43 @@ const Users = props => {
         );
     }, [filterText, resetPaginationToggle]);
 
-    const [active, setActive] = useState
     const getActiveUsers = () => {
         let active = [];
         data.map((user) => {
             if (user.active) {
-                active.push(user.id);
+                active.push(user);
             }
         });
+        setProcessedData([...active])
+        console.log(processedData)
+    }
+    const getAllUsers = () =>{
+        setProcessedData([...data])
     }
 
-    const ActiveUsers = () => {
-
-        // return(
-
-        // );
+    const activeViewHandler = (view) => {
+        setActiveView(view)
+        console.log(view)
+        if (view=='activeUsers'){
+            getActiveUsers()
+        }
+        if (view=='all'){
+            getAllUsers()
+        }
     }
+
+    const ActiveViews = () => (
+        <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+            <div style={{ backgroundColor: activeView === 'all' ? 'red' : null }} onClick={() => activeViewHandler('all')}>All</div>
+            <div style={{ backgroundColor: activeView === 'activeUsers' ? 'red' : null }} onClick={() => activeViewHandler('activeUsers')}>Active</div>
+            <div style={{ backgroundColor: activeView === 'inactiveUsers' ? 'red' : null }} onClick={() => activeViewHandler('inactiveUsers')}>Inactive</div>
+            <div style={{ backgroundColor: activeView === 'addedToday' ? 'red' : null }} onClick={() => activeViewHandler('addedToday')}>Added Today</div>
+        </div>
+    )
 
     return (
         <>
+            <ActiveViews/>
             <DataTable
                 title="Contact List"
                 columns={columns}
