@@ -1,0 +1,8 @@
+.Users {
+    display: flex; 
+    width: 80%;
+    height: 80%;
+    background-color: red;
+    align-self: center;
+    justify-self: center
+}
