@@ -12,6 +12,8 @@ const data = [
     },
     {
         id: 2,
+        active: false,
+        added: "01/28/2022",
         name: "Ervin Howell",
         phone: "010-692-6593 x09125",
         email: "abc@vits",
