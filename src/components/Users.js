@@ -180,7 +180,6 @@ const Users = props => {
                 subHeader
                 subHeaderComponent={subHeaderComponent}
                 fixedHeader={true}
-                fixedHeaderScrollHeight="400px"
                 selectableRows
             />
         </>
