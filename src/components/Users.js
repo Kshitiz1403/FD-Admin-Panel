@@ -115,18 +115,46 @@ const Users = props => {
         setProcessedData([...active])
         console.log(processedData)
     }
-    const getAllUsers = () =>{
+    const getInactiveUsers = () => {
+        let inactive = [];
+        data.map((user) => {
+            if (!user.active) {
+                inactive.push(user);
+            }
+        });
+        setProcessedData([...inactive])
+    }
+    const getAllUsers = () => {
         setProcessedData([...data])
+    }
+    const getAddedToday = () => {
+        let added = [];
+        data.map((user) => {
+            let today = new Date();
+            let dd = String(today.getDate()).padStart(2, '0');
+            let mm = String(today.getMonth() + 1).padStart(2, '0');
+            let yyyy = today.getFullYear();
+            today = mm + '/' + dd + '/' + yyyy;
+            if (user.added === today) {
+                added.push(user);
+            }
+        });
+        setProcessedData([...added])
     }
 
     const activeViewHandler = (view) => {
         setActiveView(view)
-        console.log(view)
-        if (view=='activeUsers'){
+        if (view === 'activeUsers') {
             getActiveUsers()
         }
-        if (view=='all'){
+        if (view === 'all') {
             getAllUsers()
+        }
+        if (view === 'inactiveUsers') {
+            getInactiveUsers()
+        }
+        if (view === 'addedToday') {
+            getAddedToday()
         }
     }
 
@@ -141,7 +169,7 @@ const Users = props => {
 
     return (
         <>
-            <ActiveViews/>
+            <ActiveViews />
             <DataTable
                 title="Contact List"
                 columns={columns}
