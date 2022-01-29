@@ -6,7 +6,7 @@ const Input = styled.input.attrs(props => ({
   size: props.small ? 5 : undefined
 }))`
   height: 32px;
-  width: 200px;
+  width: 500px;
   border-radius: 3px;
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
@@ -30,16 +30,16 @@ const ClearButton = styled.button`
 `;
 
 const FilterComponent = ({ filterText, onFilter, onClear }) => (
-  <>
+  <div style={{display:'flex', flexDirection:'row', left:15, position:'absolute',  }}>
     <Input
       id="search"
       type="text"
-      placeholder="Filter table data..."
+      placeholder="Search users"
       value={filterText}
       onChange={onFilter}
     />
     <ClearButton onClick={onClear}>X</ClearButton>
-  </>
+  </div>
 );
 
 export default FilterComponent;
