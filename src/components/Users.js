@@ -2,6 +2,7 @@ import React, { useMemo, useState } from "react";
 
 import DataTable from "react-data-table-component";
 import FilterComponent from "./FilterComponent";
+import moment from "moment";
 
 import data from './Data.js'
 
@@ -17,6 +18,14 @@ const NameDetails = ({ name, email }) => (
 );
 
 const Users = props => {
+
+    const [activeView, setActiveView] = useState('all');
+    const [filterText, setFilterText] = React.useState("");
+    const [resetPaginationToggle, setResetPaginationToggle] = React.useState(
+        false
+    );
+    const [processedData, setProcessedData] = useState([...data]);
+
     const columns = [
         {
             id: 'name',
@@ -74,13 +83,6 @@ const Users = props => {
         }
     ];
 
-
-    const [activeView, setActiveView] = useState('all')
-    const [filterText, setFilterText] = React.useState("");
-    const [resetPaginationToggle, setResetPaginationToggle] = React.useState(
-        false
-    );
-    const [processedData, setProcessedData] = useState([...data])
     const filteredItems = processedData.filter(
         item =>
             JSON.stringify(item)
@@ -105,6 +107,11 @@ const Users = props => {
         );
     }, [filterText, resetPaginationToggle]);
 
+
+    const getAllUsers = () => {
+        setProcessedData([...data])
+    }
+
     const getActiveUsers = () => {
         let active = [];
         data.map((user) => {
@@ -115,6 +122,7 @@ const Users = props => {
         setProcessedData([...active])
         console.log(processedData)
     }
+
     const getInactiveUsers = () => {
         let inactive = [];
         data.map((user) => {
@@ -124,17 +132,12 @@ const Users = props => {
         });
         setProcessedData([...inactive])
     }
-    const getAllUsers = () => {
-        setProcessedData([...data])
-    }
+
     const getAddedToday = () => {
         let added = [];
+        let today = new Date;
+        today = moment().format("DD-MM-YYYY");
         data.map((user) => {
-            let today = new Date();
-            let dd = String(today.getDate()).padStart(2, '0');
-            let mm = String(today.getMonth() + 1).padStart(2, '0');
-            let yyyy = today.getFullYear();
-            today = mm + '/' + dd + '/' + yyyy;
             if (user.added === today) {
                 added.push(user);
             }
@@ -144,12 +147,13 @@ const Users = props => {
 
     const activeViewHandler = (view) => {
         setActiveView(view)
-        if (view === 'activeUsers') {
-            getActiveUsers()
-        }
         if (view === 'all') {
             getAllUsers()
         }
+        if (view === 'activeUsers') {
+            getActiveUsers()
+        }
+
         if (view === 'inactiveUsers') {
             getInactiveUsers()
         }
