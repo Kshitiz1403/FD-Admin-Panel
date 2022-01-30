@@ -7,7 +7,7 @@ function App() {
   return (
     <div className="App">
       <Users click = {clickhandler}/>
-      {/* <Button text="Update" containerStyles={{}} textStyles={{}} empty/> */}
+      {/* <Button text="Update" containerStyles={{}} textStyles={{}} empty onClick={()=>{}}/> */}
     </div>
   );
 }

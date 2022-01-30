@@ -13,13 +13,12 @@ const Button = (props) => {
         width:'fit-content',
         borderRadius: 8,
         cursor: isMouseOver ? "pointer" : null,
-    }
-
-    const text = {
         paddingLeft: 20,
         paddingRight: 20,
         paddingTop: 10,
         paddingBottom: 10,
+    }
+    const text = {
         fontWeight: 500,
     }
 
@@ -49,6 +48,7 @@ const Button = (props) => {
                     ...emptyContainer,
                     ...props.containerStyles,
                 }}
+                    onClick={props.onClick}
                     onMouseOver={() => setIsMouseOver(true)}
                     onMouseLeave={() => setIsMouseOver(false)}>
                     <div style={{ ...text, ...emptyContainerText, ...props.textStyles }}>{props.text}</div>
@@ -60,6 +60,7 @@ const Button = (props) => {
                     ...filledContainer,
                     ...props.containerStyles,
                 }}
+                    onClick={props.onClick}
                     onMouseOver={() => setIsMouseOver(true)}
                     onMouseLeave={() => setIsMouseOver(false)}>
                     <div style={{ ...text, ...filledContainerText, ...props.textStyles }}>{props.text}</div>
