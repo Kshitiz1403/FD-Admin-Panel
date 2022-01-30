@@ -1,3 +1,4 @@
+import Button from "./components/shared/Button";
 import Users from "./components/Users";
 import './css/App.css'
 
@@ -6,6 +7,7 @@ function App() {
   return (
     <div className="App">
       <Users click = {clickhandler}/>
+      {/* <Button text="Update" containerStyles={{}} textStyles={{}} empty/> */}
     </div>
   );
 }
