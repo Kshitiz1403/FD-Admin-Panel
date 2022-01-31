@@ -1,7 +1,7 @@
 .App{
   display: flex;
   flex-direction: column;
-  background-color: grey;
+  background-color: #000000;
   /* position: absolute;
   top: 0;
   bottom: 0;

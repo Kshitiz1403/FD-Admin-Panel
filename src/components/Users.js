@@ -1,10 +1,11 @@
-import React, { useMemo, useState } from "react";
-
+import React, { useMemo, useState, useEffect } from "react";
+import axios from "axios";
 import DataTable from "react-data-table-component";
-import FilterComponent from "./FilterComponent";
 import moment from "moment";
+import FilterComponent from "./FilterComponent";
+// import users from './Data.js'
 
-import data from './Data.js'
+import './css/Users.css'
 
 const NameDetails = ({ name, email }) => (
     <>
@@ -17,14 +18,38 @@ const NameDetails = ({ name, email }) => (
     </>
 );
 
+const customStyles = {
+    table:{
+        style:{
+            color: '#000000',
+            backgroundColor: '#000000',
+        }
+    },
+    rows:{
+        style:{
+            // minHeight: '80px'
+        }
+    }
+}
+
 const Users = props => {
 
     const [activeView, setActiveView] = useState('all');
-    const [filterText, setFilterText] = React.useState("");
-    const [resetPaginationToggle, setResetPaginationToggle] = React.useState(
-        false
-    );
-    const [processedData, setProcessedData] = useState([...data]);
+    const [filterText, setFilterText] = useState("");
+    const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
+    const [users, setUsers] = useState([]);
+    const [processedData, setProcessedData] = useState([]);
+    const [pending, setPending] = useState(true);
+
+    const port = "https://apifd.herokuapp.com";
+    
+    useEffect(() => {
+      axios.get(`${port}/users`).then(data => {
+          setUsers([...data.data])
+          setProcessedData([...data.data])
+          setPending(false)
+        }).catch(err => console.log(err));
+    }, []);
 
     const columns = [
         {
@@ -109,23 +134,22 @@ const Users = props => {
 
 
     const getAllUsers = () => {
-        setProcessedData([...data])
+        setProcessedData([...users])
     }
 
     const getActiveUsers = () => {
         let active = [];
-        data.map((user) => {
+        users.map((user) => {
             if (user.active) {
                 active.push(user);
             }
         });
         setProcessedData([...active])
-        console.log(processedData)
     }
 
     const getInactiveUsers = () => {
         let inactive = [];
-        data.map((user) => {
+        users.map((user) => {
             if (!user.active) {
                 inactive.push(user);
             }
@@ -137,7 +161,7 @@ const Users = props => {
         let added = [];
         let today = new Date;
         today = moment().format("DD-MM-YYYY");
-        data.map((user) => {
+        users.map((user) => {
             if (user.added === today) {
                 added.push(user);
             }
@@ -172,7 +196,7 @@ const Users = props => {
     )
 
     return (
-        <>
+        <div className="Users">
             <ActiveViews />
             <DataTable
                 title="Contact List"
@@ -185,8 +209,11 @@ const Users = props => {
                 subHeaderComponent={subHeaderComponent}
                 fixedHeader={true}
                 selectableRows
+                progressPending={pending}
+                theme="dark"
+                customStyles={customStyles}
             />
-        </>
+        </div>
 
     );
 };
