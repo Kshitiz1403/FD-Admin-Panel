@@ -1,8 +1,8 @@
 .Users {
     display: flex; 
-    width: 80%;
-    height: 80%;
-    background-color: red;
-    align-self: center;
-    justify-self: center
+    flex-direction: column;
+    background-color: #252f36;
+    /* align-self: center; */
+    justify-self: center;
+    color: white
 }
