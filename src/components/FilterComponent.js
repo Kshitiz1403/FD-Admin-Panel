@@ -1,55 +1,65 @@
 import React from "react";
-import styled from "styled-components";
-import magnifyingGlass from "../assets/magnifying-glass.png"
+import colors from '../constants/colors'
+import { BsSearch, BsFillXCircleFill } from "react-icons/bs";
 
-const Input = styled.input.attrs(props => ({
-  type: "text",
-  size: props.small ? 5 : undefined
-}))`
-  height: 32px;
-  width: 500px;
-  // border-radius: 3px;
-  // border-top-left-radius: 5px;
-  // border-bottom-left-radius: 5px;
-  // border-top-right-radius: 0;
-  // border-bottom-right-radius: 0;
-  // border: 1px solid #e5e5e5;
-  padding: 0 32px 0 16px;
-`;
+const container = {
+  position: "absolute",
+  left: 15,
+  width: '100%'
+}
+const containerStyles = {
+  display: "flex",
+  flexDirection: "row",
+  width: '60%',
+  height: 50
+}
+const inputContainerStyles = {
+  display: "flex",
+  width: '100%',
+  backgroundColor: colors.dark,
+  borderRadius: 8,
+  borderColor: colors.grey,
+  borderWidth: 2,
+  borderStyle: 'solid',
+  justifyContent: 'center',
+  alignItems: 'center',
+  paddingLeft: 20
+}
 
-const ClearButton = styled.button`
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
-  height: 34px;
-  width: 32px;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
+const inputStyles = {
+  width: '100%',
+  backgroundColor: "inherit",
+  border: 0,
+  color: colors.text.primary,
+  outline: "none",
+  fontSize: 15
+}
 
-const InputContainer = styled.div`
-  display:flex,
-
-`
-
-const FilterComponent = ({ filterText, onFilter, onClear }) => (
-  <div style={{ display: 'flex', flexDirection: 'row', left: 15, position: 'absolute', }}>
-    <div style={{ display: 'flex' }}>
-      <img src={magnifyingGlass} style={{width:50, height:50}}/>
-      {/* <div style={{ width: '100%', height: '100%', backgroundColor: 'red' }}></div> */}
-      <Input
-        id="search"
-        type="text"
-        placeholder="Search users"
-        value={filterText}
-        onChange={onFilter}
-      />
+const Input = ({ filterText, onFilter, onClear }) => (
+  <div style={containerStyles}>
+    <div style={inputContainerStyles}>
+      <BsSearch size={20} style={{ marginRight: 15 }} />
+      <input style={inputStyles} placeholder="Search users" value={filterText} onChange={onFilter} type="text" id="search" />
+      {filterText ?
+        <BsFillXCircleFill size={20} style={{ marginRight: 10, cursor: "pointer" }} onClick={onClear} /> : null}
     </div>
-    <ClearButton onClick={onClear}>X</ClearButton>
+  </div>)
+
+const SortBy = () => (
+  <div style={{ marginLeft: 20, width: '30%' }}>
+    <div style={{ position: 'absolute', top: -9, marginLeft: 20 }}>Sort By</div>
+    <div style={{ backgroundColor: colors.dark, height: 50, borderRadius: 8, borderColor: colors.grey, borderWidth: 2, borderStyle: 'solid', }}>
+    </div>
   </div>
-);
+)
+
+const FilterComponent = ({ filterText, onFilter, onClear }) => {
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', ...container }}>
+      <Input filterText={filterText} onFilter={onFilter} onClear={onClear} />
+      <SortBy />
+    </div>
+  )
+}
 
 export default FilterComponent;
