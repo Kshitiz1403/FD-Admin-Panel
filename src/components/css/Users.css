@@ -1,7 +1,6 @@
 .Users {
     display: flex; 
     flex-direction: column;
-    background-color: #252f36;
     /* align-self: center; */
     justify-self: center;
     color: white

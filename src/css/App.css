@@ -1,7 +1,9 @@
 .App{
   display: flex;
   flex-direction: column;
-  background-color: #000000;
+  overflow-x: hidden;
+  height: 100vh;
+  min-height: 100vh;
   /* position: absolute;
   top: 0;
   bottom: 0;
