@@ -1,5 +1,5 @@
 import React from "react";
-import colors from '../constants/colors'
+import colors from '../../constants/colors'
 import { BsSearch, BsFillXCircleFill } from "react-icons/bs";
 
 const container = {

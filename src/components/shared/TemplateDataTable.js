@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import DataTable from "react-data-table-component";
-import FilterComponent from "../FilterComponent";
+import FilterComponent from "./FilterComponent";
 
 const TemplateDataTable = (props) => {
 

@@ -2,7 +2,7 @@ import React, { useMemo, useState, useEffect } from "react";
 import axios from "axios";
 import DataTable from "react-data-table-component";
 import moment from "moment";
-import FilterComponent from "./FilterComponent";
+import FilterComponent from "./shared/FilterComponent";
 // import users from './Data.js'
 
 import './css/Users.css'
