@@ -6,6 +6,7 @@ import FilterComponent from "./FilterComponent";
 // import users from './Data.js'
 
 import './css/Users.css'
+import TemplateDataTable from "./shared/TemplateDataTable";
 
 const NameDetails = ({ name, email }) => (
     <>
@@ -34,9 +35,6 @@ const customStyles = {
 
 const Users = props => {
 
-    const [activeView, setActiveView] = useState('all');
-    const [filterText, setFilterText] = useState("");
-    const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
     const [users, setUsers] = useState([]);
     const [processedData, setProcessedData] = useState([]);
     const [pending, setPending] = useState(true);
@@ -108,31 +106,6 @@ const Users = props => {
         }
     ];
 
-    const filteredItems = processedData.filter(
-        item =>
-            JSON.stringify(item)
-                .toLowerCase()
-                .indexOf(filterText.toLowerCase()) !== -1
-    );
-
-    const subHeaderComponent = useMemo(() => {
-        const handleClear = () => {
-            if (filterText) {
-                setResetPaginationToggle(!resetPaginationToggle);
-                setFilterText("");
-            }
-        };
-
-        return (
-            <FilterComponent
-                onFilter={e => setFilterText(e.target.value)}
-                onClear={handleClear}
-                filterText={filterText}
-            />
-        );
-    }, [filterText, resetPaginationToggle]);
-
-
     const getAllUsers = () => {
         setProcessedData([...users])
     }
@@ -169,50 +142,12 @@ const Users = props => {
         setProcessedData([...added])
     }
 
-    const activeViewHandler = (view) => {
-        setActiveView(view)
-        if (view === 'all') {
-            getAllUsers()
-        }
-        if (view === 'activeUsers') {
-            getActiveUsers()
-        }
-
-        if (view === 'inactiveUsers') {
-            getInactiveUsers()
-        }
-        if (view === 'addedToday') {
-            getAddedToday()
-        }
-    }
-
-    const ActiveViews = () => (
-        <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
-            <div style={{ backgroundColor: activeView === 'all' ? 'red' : null }} onClick={() => activeViewHandler('all')}>All</div>
-            <div style={{ backgroundColor: activeView === 'activeUsers' ? 'red' : null }} onClick={() => activeViewHandler('activeUsers')}>Active</div>
-            <div style={{ backgroundColor: activeView === 'inactiveUsers' ? 'red' : null }} onClick={() => activeViewHandler('inactiveUsers')}>Inactive</div>
-            <div style={{ backgroundColor: activeView === 'addedToday' ? 'red' : null }} onClick={() => activeViewHandler('addedToday')}>Added Today</div>
-        </div>
-    )
+    const views = { "All": users, "Active": processedData, "Inactive": processedData, "Created Today": processedData }
 
     return (
         <div className="Users">
-            <ActiveViews />
-            <DataTable
-                title="Contact List"
-                columns={columns}
-                data={filteredItems}
-                defaultSortFieldId={'date-ordered'}
-                striped
-                pagination
-                subHeader
-                subHeaderComponent={subHeaderComponent}
-                fixedHeader={true}
-                selectableRows
-                progressPending={pending}
-                theme="dark"
-                customStyles={customStyles}
-            />
+            <TemplateDataTable columns={columns} views={views} loading={pending}/>
+            {/* <ActiveViews /> */}
         </div>
 
     );
