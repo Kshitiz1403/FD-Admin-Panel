@@ -64,7 +64,7 @@ const TemplateDataTable = (props) => {
                 subHeaderComponent={subHeaderComponent}
                 fixedHeader={true}
                 selectableRows
-                // progressPending={pending}
+                progressPending={loading}
                 theme="dark"
             // customStyles={customStyles}
             />
