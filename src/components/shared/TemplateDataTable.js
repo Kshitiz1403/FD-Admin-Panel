@@ -1,15 +1,19 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import DataTable from "react-data-table-component";
 import FilterComponent from "./FilterComponent";
 
 const TemplateDataTable = (props) => {
 
     let columns = props.columns
-    const views = props.views
+    let views = props.views
     let loading = props.loading
 
     // Gives an array of keys
     let keys = Object.keys(views)
+
+    useEffect(() => {
+        setProcessedData(views[keys[0]])
+    }, [views])
 
     const [filterText, setFilterText] = useState("");
     const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
@@ -43,7 +47,7 @@ const TemplateDataTable = (props) => {
     const ActiveViews = () => {
         return (
             <div style={{ display: 'flex', justifyContent: 'space-evenly', backgroundColor: 'red' }}>
-                {keys.map(key => <div style={{ backgroundColor: activeView == key ? 'blue' : null, cursor:'pointer' }} onClick={() => {
+                {keys.map(key => <div style={{ backgroundColor: activeView == key ? 'blue' : null, cursor: 'pointer' }} onClick={() => {
                     setActiveView(key)
                     setProcessedData(views[key])
                 }}>{key}</div>)}

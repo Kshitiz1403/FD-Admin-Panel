@@ -1,12 +1,9 @@
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import DataTable from "react-data-table-component";
 import moment from "moment";
-import FilterComponent from "./shared/FilterComponent";
-// import users from './Data.js'
-
 import './css/Users.css'
 import TemplateDataTable from "./shared/TemplateDataTable";
+import { port } from "../App";
 
 const NameDetails = ({ name, email }) => (
     <>
@@ -20,14 +17,14 @@ const NameDetails = ({ name, email }) => (
 );
 
 const customStyles = {
-    table:{
-        style:{
+    table: {
+        style: {
             color: '#000000',
             backgroundColor: '#000000',
         }
     },
-    rows:{
-        style:{
+    rows: {
+        style: {
             // minHeight: '80px'
         }
     }
@@ -36,17 +33,24 @@ const customStyles = {
 const Users = props => {
 
     const [users, setUsers] = useState([]);
-    const [processedData, setProcessedData] = useState([]);
     const [pending, setPending] = useState(true);
+    const [activeUsers, setActiveUsers] = useState([])
+    const [inactiveUsers, setInactiveUsers] = useState([])
+    const [addedTodayUsers, setAddedTodayUsers] = useState([])
 
-    const port = "https://apifd.herokuapp.com";
-    
-    useEffect(() => {
-      axios.get(`${port}/users`).then(data => {
-          setUsers([...data.data])
-          setProcessedData([...data.data])
-          setPending(false)
-        }).catch(err => console.log(err));
+    useEffect(async () => {
+        try {
+            const data = await axios.get(`${port}/users`)
+            setUsers(data.data)
+            setPending(false)
+            getActiveUsers()
+            getInactiveUsers()
+            getAddedToday()
+            // getActiveUsers
+        }
+        catch (err) {
+            console.error(err)
+        }
     }, []);
 
     const columns = [
@@ -58,7 +62,7 @@ const Users = props => {
         {
             id: 'phone',
             name: 'Phone',
-            selector: row => row.phone
+            selector: row => `+${row.phone}`
         },
         {
             id: 'orders',
@@ -73,21 +77,15 @@ const Users = props => {
             sortable: true
         },
         {
-            id: 'date-signed-in',
-            name: 'Date Signed In',
-            selector: row => row.dateSignedIn,
-            sortable: true
-        },
-        {
             id: 'date-ordered',
             name: 'Date Ordered',
-            selector: row => row.dateOrdered,
+            selector: row => moment(row.dateOrdered).format('MMMM Do YYYY, h:mm:ss a'),
             sortable: true
         },
         {
             id: 'date-created',
             name: 'Date Created',
-            selector: row => row.dateCreated,
+            selector: row => moment(row.createdAt).format('MMMM Do YYYY, h:mm:ss a'),
             sortable: true
         },
         {
@@ -106,10 +104,6 @@ const Users = props => {
         }
     ];
 
-    const getAllUsers = () => {
-        setProcessedData([...users])
-    }
-
     const getActiveUsers = () => {
         let active = [];
         users.map((user) => {
@@ -117,7 +111,7 @@ const Users = props => {
                 active.push(user);
             }
         });
-        setProcessedData([...active])
+        setActiveUsers([...active])
     }
 
     const getInactiveUsers = () => {
@@ -127,27 +121,26 @@ const Users = props => {
                 inactive.push(user);
             }
         });
-        setProcessedData([...inactive])
+        setInactiveUsers([...inactive])
     }
 
     const getAddedToday = () => {
-        let added = [];
+        let addedArr = [];
         let today = new Date;
-        today = moment().format("DD-MM-YYYY");
+        today = moment(today).format("DD-MM-YYYY").toString();
         users.map((user) => {
-            if (user.added === today) {
-                added.push(user);
+            if (moment(user.createdAt).format('DD-MM-YYYY').toString() === today) {
+                addedArr.push(user);
             }
         });
-        setProcessedData([...added])
+        setAddedTodayUsers([...addedArr])
     }
 
-    const views = { "All": users, "Active": processedData, "Inactive": processedData, "Created Today": processedData }
+    const views = { "All": users, "Created Today": addedTodayUsers, "Active": activeUsers, "Inactive": inactiveUsers }
 
     return (
         <div className="Users">
-            <TemplateDataTable columns={columns} views={views} loading={pending}/>
-            {/* <ActiveViews /> */}
+            <TemplateDataTable columns={columns} views={views} loading={pending} />
         </div>
 
     );
